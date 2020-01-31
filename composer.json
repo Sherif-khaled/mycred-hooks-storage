@@ -1,0 +1,23 @@
+{
+  "name": "x2hex/my-cred-hooks-storage",
+  "version": "1.0",
+  "description": "More hooks provided for mycred plugin.",
+  "type": "project",
+  "license": "GPL",
+  "authors": [
+    {
+      "name": "Sherif Khaled",
+      "email": "sherif.khaleed@gmail.com"
+    }
+  ],
+  "minimum-stability": "stable",
+  "require": {
+  },
+  "autoload": {
+    "classmap": [
+    ],
+    "psr-4": {
+      "MyCredHooksStorage\\": "./Inc"
+    }
+  }
+}
