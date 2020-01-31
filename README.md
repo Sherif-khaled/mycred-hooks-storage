@@ -1,0 +1,1 @@
+# mycred-hooks-storage
