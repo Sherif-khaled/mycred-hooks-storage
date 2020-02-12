@@ -40,6 +40,28 @@ class Database
         }
 
     }
+    function create_user_activity_role_table()
+    {
+        global $wpdb;
+
+        $table_name = $wpdb->prefix . 'mycred_user_activities_roles ';
+
+        if ($wpdb->get_var("show tables like '$table_name'") != $table_name) {
+            $sql = "CREATE TABLE " . $table_name .
+                " (`id` INT(6) NOT NULL AUTO_INCREMENT,
+			       `user_id` INT(6) NOT NULL,
+			       `hook_name` VARCHAR(30) NOT NULL,
+			       `activity_id` INT(6) NOT NULL,
+			       `allow` BOOLEAN DEFAULT 1,
+			       `created_at` datetime DEFAULT '0000-00-00 00:00:00' NOT NULL,
+				   UNIQUE KEY id (id)
+			     );";
+
+            require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+            dbDelta($sql);
+        }
+
+    }
 
     function create_table($tables)
     {

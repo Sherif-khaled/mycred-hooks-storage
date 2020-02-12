@@ -32,6 +32,7 @@ class Activate
 
         (new Database)->create_table($tables);
         (new Database)->create_user_activity_table();
+        (new Database)->create_user_activity_role_table();
 
     }
 

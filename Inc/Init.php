@@ -50,6 +50,7 @@ final class Init
             Base\Enqueue::class,
             Admin\HooksTableListActions::class,
             Admin\RegisterHooks::class,
+            Admin\UserActivityRole::class,
 
         ];
     }
