@@ -4,8 +4,6 @@ jQuery(document).ready(function ($) {
         $('div[class*=real3dflipbook]').find('a').on('click', function () {
             let bookId = $(this).parent().attr('class');
             window.bookId = extractBookId(bookId);
-            console.log($(this).parent().attr('class'));
-
         });
 
         function extractBookId(str) {
