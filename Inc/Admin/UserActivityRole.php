@@ -14,26 +14,32 @@ class UserActivityRole
     {
         $books = $this->get_user_books_activities_roles(9);
 
-        var_dump($books);
+        $games = $this->get_user_games_activities_roles(9);
 
-        var_dump(json_encode($books));
+        var_dump($games);
 
     }
     function checkUserRole(){
         $id = get_current_user_id();
-        $activity_exist = $this->check_user_activities_exist($id);
 
-        if(!$activity_exist){
-            $this->hide_book_activities();
-            $this->hide_game_activities();
-        } else {
+        if(is_page('books')){
             $books = $this->get_user_books_activities_roles($id);
-            $this->hide_book_activities_by_id($books);
-            $dd = [3321,3322];
-            $this->hide_game_activities_by_id($dd);
+            if(!$books || !is_user_logged_in()){
+                $this->hide_book_activities();
+            }
+            else{
+                $this->hide_book_activities_by_id($books);
+            }
         }
-
-
+        elseif(is_page('games')){
+            $games = $this->get_user_games_activities_roles($id);
+            if(!$games || !is_user_logged_in()){
+                $this->hide_game_activities();
+            }
+            else{
+                $this->hide_game_activities_by_id($games);
+            }
+        }
     }
 
     function get_user_books_activities_roles($user_id)
@@ -47,7 +53,6 @@ class UserActivityRole
                                             ON b.id = a.activity_id WHERE a.user_id = {$user_id}");
         return json_decode(json_encode($books), true);
     }
-
     function get_user_games_activities_roles($user_id)
     {
         global $wpdb;
@@ -195,15 +200,20 @@ class UserActivityRole
                 let game_id = '<?php echo json_encode($game_id);?>';
                 game_id = JSON.parse(game_id);
                 setTimeout(() => {
+                    function extractGameId(elem) {
 
-                    function extractGameId(str) {
-                        if(str === null){
-                            return;
-                        }
-                        return str.substring(
-                            str.lastIndexOf("-") + 1
-                        );
+                        let check = "zadgame-";
+                        let classes = $(elem).attr("class").split(/\s+/);
+                        let id = 0;
+                            $.each(classes, function (index, item) {
+                                if (item.indexOf(check) === 0)
+                                    id = parseInt(item.substr(check.length), 10);
+                            });
+
+                            return id;
+
                     }
+
                     game_id = game_id.map(function(a) {
                         return parseInt(a.activity_id);
                     });
@@ -211,7 +221,7 @@ class UserActivityRole
                     let games_array = Array.from($('div[class*=zadgame]'));
 
                     let filter = jQuery.grep(games_array, function (value) {
-                        let _game_id = extractGameId($(value).attr('class'));
+                        let _game_id = extractGameId(value);
 
                         if(game_id.indexOf(parseInt(_game_id)) === -1){
                             return value;
@@ -220,14 +230,6 @@ class UserActivityRole
 
                     Array.from(filter).forEach(game => {
                         $(game).closest('.elementor-top-column').remove();
-
-                        // let bookClone = book.cloneNode(true);
-                        // $(bookClone).bind('click',function () {
-                        //
-                        // });
-                        //
-                        // book.parentNode.replaceChild(bookClone, book);
-
                     });
                 }, 1000)
 
